@@ -1,0 +1,56 @@
+const { Client, GatewayIntentBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const http = require('http');
+
+// --- BAGIAN WEB SERVER (AGAR RENDER TIDAK MATI) ---
+http.createServer((req, res) => {
+    res.write("Yapping Empire Bot is Online!");
+    res.end();
+}).listen(8080); 
+// ---------------------------------------------------
+
+const TOKEN = 'MTQ2NjY3MTEyNTA0MjgyMzE3Mg.Go6GXy.OCVtWBCBxn5zr_gRxr6Ud7eJYfyuR4AEygaIHk';
+
+const client = new Client({ 
+    intents: [
+        GatewayIntentBits.Guilds, 
+        GatewayIntentBits.GuildMessages, 
+        GatewayIntentBits.MessageContent
+    ] 
+});
+
+client.once('ready', () => {
+    console.log(`✅ Bot Aktif: ${client.user.tag}`);
+});
+
+client.on('messageCreate', async (message) => {
+    if (message.author.bot) return;
+
+    if (message.content.toLowerCase() === '!daftar') {
+        const embed = new EmbedBuilder()
+            .setColor('#2F3136')
+            .setTitle('📌 Pendaftaran Admin Yapping Empire')
+            .setDescription(`<@${message.author.id}> | Portal`)
+            .addFields(
+                { name: 'Nama', value: `${message.author.username}`, inline: false },
+                { name: 'Usia', value: '25 tahun', inline: false },
+                { name: 'Jenis Kelamin', value: 'Laki laki', inline: false },
+                { name: 'Posisi', value: 'Admin', inline: false },
+                { name: 'Kelebihan', value: 'Berbicara', inline: false }
+            )
+            .setFooter({ 
+                text: `Pendaftar: ${message.author.tag}`, 
+                iconURL: message.author.displayAvatarURL() 
+            });
+
+        const row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
+                .setCustomId('isi_formulir')
+                .setLabel('📝 Isi Formulir')
+                .setStyle(ButtonStyle.Primary),
+        );
+
+        await message.channel.send({ embeds: [embed], components: [row] });
+    }
+});
+
+client.login(MTQ2NjY3MTEyNTA0MjgyMzE3Mg.Go6GXy.OCVtWBCBxn5zr_gRxr6Ud7eJYfyuR4AEygaIHk);
