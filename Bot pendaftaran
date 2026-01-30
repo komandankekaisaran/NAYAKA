@@ -1,0 +1,61 @@
+const { Client, GatewayIntentBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+
+const TOKEN = 'MTQ2NjY3MTEyNTA0MjgyMzE3Mg.Go6GXy.OCVtWBCBxn5zr_gRxr6Ud7eJYfyuR4AEygaIHk';
+
+const client = new Client({ 
+    intents: [
+        GatewayIntentBits.Guilds, 
+        GatewayIntentBits.GuildMessages, 
+        GatewayIntentBits.MessageContent
+    ] 
+});
+
+client.once('ready', () => {
+    console.log(`✅ Bot Aktif: ${client.user.tag}`);
+});
+
+client.on('messageCreate', async (message) => {
+    // Bot mengabaikan pesan dari bot lain
+    if (message.author.bot) return;
+
+    // Perintah untuk memicu embed
+    if (message.content.toLowerCase() === '!daftar') {
+        
+        const userMention = `<@${message.author.id}>`;
+        const userTag = message.author.tag;
+        const avatarUrl = message.author.displayAvatarURL();
+
+        // Membuat tampilan seperti di gambar
+        const embed = new EmbedBuilder()
+            .setColor('#2F3136') // Warna abu-abu gelap khas Discord
+            .setTitle('📌 Pendaftaran Admin Yapping Empire')
+            .setDescription(`${userMention} | Portal`)
+            .addFields(
+                { name: 'Nama', value: `${message.author.username}`, inline: false },
+                { name: 'Usia', value: '25 tahun', inline: false },
+                { name: 'Jenis Kelamin', value: 'Laki laki', inline: false },
+                { name: 'Posisi', value: 'Admin', inline: false },
+                { name: 'Kelebihan', value: 'Berbicara', inline: false }
+            )
+            .setFooter({ 
+                text: `Pendaftar: ${userTag} | ${new Date().toLocaleString('id-ID')}`, 
+                iconURL: avatarUrl 
+            });
+
+        // Tombol biru di bawah pesan
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('isi_formulir')
+                    .setLabel('📝 Isi Formulir')
+                    .setStyle(ButtonStyle.Primary),
+            );
+
+        await message.channel.send({
+            embeds: [embed],
+            components: [row]
+        });
+    }
+});
+
+client.login(MTQ2NjY3MTEyNTA0MjgyMzE3Mg.Go6GXy.OCVtWBCBxn5zr_gRxr6Ud7eJYfyuR4AEygaIHk);
